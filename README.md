@@ -126,25 +126,25 @@ tf.rotation = Quaternion.AngleAxis(30, Vector3.up);
 ### 13. ¿Cómo puedes averiguar la matriz de proyección en perspectiva que se ha 
 usado para proyectar la escena al último frame renderizado?
 
-La matriz de proyección la obtenenemos a partir de la propiedad de la cámara *projectionMatrix*
+La matriz de proyección la obtenenemos a partir de la propiedad de la cámara *previousViewProjectionMatrix*
 y mostrándola por la consola. Para que sea en perspectiva tenemos que tener el valor 
 de *projection* de la cámara con *perspective*.
 
 ```C# 
 Camera cam = GetComponent<Camera>();
-Debug.Log(cam.projectionMatrix);
+Debug.Log(cam.previousViewProjectionMatrix);
 ```
 
 ### 14. ¿Cómo puedes averiguar la matriz de proyección en perspectiva ortográfica 
 que se ha usado para proyectar la escena al último frame renderizado?
 
-La matriz de proyección la obtenenemos a partir de la propiedad de la cámara *projectionMatrix*
+La matriz de proyección la obtenenemos a partir de la propiedad de la cámara *previousViewProjectionMatrix*
 y mostrándola por la consola. Para que sea en perspectiva ortográfica tenemos que tener el valor 
 de *projection* de la cámara con *orthographic*.
 
 ```C# 
 Camera cam = GetComponent<Camera>();
-Debug.Log(cam.projectionMatrix);
+Debug.Log(cam.previousViewProjectionMatrix);
 ```
 
 ### 15.  ¿Cómo puedes obtener la matriz de transformación entre el sistema de 
@@ -158,3 +158,76 @@ Camera tf = GetComponent<Transform>();
 Debug.Log(tf.localToWorldMatrix);
 ```
 
+### 16. ¿Cómo puedes obtener la matriz para cambiar al sistema de referencia de vista?
+
+Para obtener la matriz para cambiar al sistema de referencia de vista utilizamos el 
+método *GetStereoViewMatrix* que pertenece a la cámara, la cual nos devuelve dicha matriz.
+
+En caso de que queramos modificarla usamos método *SetStereoViewMatrix*.
+
+### 17. Especifica la matriz de la proyección usando en un instante de la ejecución 
+del ejercicio 1 de la práctica 1.
+
+Para ello, abrimos la práctica uno y le añadimos un *script* a la cámara en el cuál 
+mostramos la matriz de proyección en un instante de ejecución por consola.
+
+```C#
+public Camera cam;
+void Start()
+{
+    cam = GetComponent<Camera>();
+    Debug.Log("Matriz de proyeccion: " + cam.projectionMatrix);
+}
+```
+
+Obteniendo como salida la siguiente matriz:
+
+| | | | |
+| -- | -- | -- | -- |
+| 0.64485 |	0.00000 |	0.00000	| 0.00000 |
+| 0.00000	| 1.64795	| 0.00000	| 0.00000 |
+| 0.00000	| 0.00000	| -1.00060 | -0.60018 |
+| 0.00000	| 0.00000	| -1.00000 | 0.00000 |
+
+### 18. Especifica la matriz de modelo y vista de la escena del ejercicio 1 de la práctica 1.
+
+Para especificar la matriz vista de la escena podemos mostrarla utilizando el método
+de la cámara *worldToCameraMatrix* y para la módelo *localToWorldMatrix* obteniendo 
+las siguientes matrices repectivamente.
+
+| | | | |
+| -- | -- | -- | -- |
+| 1.00000 |	0.00000 |	0.00000 |	0.00000 |
+| 0.00000 |	1.00000 |	0.00000 |	-1.00000 |
+| 0.00000 |	0.00000 |	-1.00000 | -15.00000 |
+| 0.00000	| 0.00000	| 0.00000 |	1.00000 |
+
+| | | | |
+| -- | -- | -- | -- |
+| 1.00000 |	0.00000 |	0.00000 |	0.00000 |
+| 0.00000	| 1.00000 |	0.00000	| 1.00000 |
+| 0.00000	| 0.00000 |	1.00000	| -15.00000 |
+| 0.00000	| 0.00000 |	0.00000	| 1.00000 |
+
+
+### 19. Aplica una rotación en el start de uno de los objetos de la escena y muestra la matriz de cambio al sistema de referencias mundial.
+
+Primero, le añadimos en la función *start* de un objeto una rotación y mostramos la matriz del cambio al sistema de referencias mundial antes y después realizar la rotación respectivamente.
+
+| | | | |
+| -- | -- | -- | -- |
+| 1.00000 |	0.00000 |	0.00000 |	5.77000 |
+| 0.00000 |	1.00000 |	0.00000 |	0.00000 |
+| 0.00000 |	0.00000 |	1.00000 |	0.00000 |
+| 0.00000 |	0.00000 |	0.00000 |	1.00000 |
+
+| | | | |
+| -- | -- | -- | -- |
+| 0.64279	 | 0.00000	| 0.76604 |	5.77000 |
+| 0.00000	 | 1.00000	| 0.00000 |	0.00000 |
+| -0.76604 | 	0.00000	| 0.64279 |	0.00000 |
+| 0.00000	 | 0.00000	| 0.00000 |	1.00000 |
+
+### 20. ¿Cómo puedes calcular las coordenadas del sistema de referencia de un objeto con las siguientes propiedades del Transform:?: Position (3, 1, 1, Rotation (45, 0, 45)
+
+Para calcular las coordenadas del sistema de referencia con las referencias especificadas en el título multiplicamos en coordenadas primigenias de la posición por la matriz que contiene el cambio de referencia (*localToWorldMatrix*).
